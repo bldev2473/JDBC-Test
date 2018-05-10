@@ -5,7 +5,7 @@ import java.util.Scanner;
 import DAO.MemberDAO;
 import Model.Member;
 
-public class MemberController {
+public class MemberController implements MController {
     Scanner sc = new Scanner(System.in);
 
     public void memberPrint() {
@@ -40,6 +40,7 @@ public class MemberController {
                                     searchMember();
                                     break;
                                 case "L":
+                                    listMember();
                                     break;
                                 case "Q":
                                     break;
@@ -85,7 +86,7 @@ public class MemberController {
 
     public void modifyMember() {
         MemberDAO mdao = new MemberDAO();
-        String inputStr = "";
+        String inputStr;
         System.out.println("회원 수정 페이지입니다.");
         System.out.println("아이디를 입력해주세요.");
         String id = sc.nextLine();
@@ -142,6 +143,7 @@ public class MemberController {
         System.out.println("아이디를 입력해주세요.");
         String id = sc.nextLine();
         mdao.JDBCsqlDelete(id);
+        System.out.println("삭제가 완료되었습니다.");
     }
 
     public void searchMember() {
@@ -150,5 +152,11 @@ public class MemberController {
         System.out.println("아이디를 입력해주세요.");
         String id = sc.nextLine();
         mdao.JDBCsqlSelect(id);
+    }
+
+    public void listMember() {
+        MemberDAO mdao = new MemberDAO();
+        System.out.println("회원 목록 페이지입니다.");
+        mdao.JDBCsqlSelectAll();
     }
 }
