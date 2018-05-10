@@ -35,11 +35,6 @@ public class MemberDAO {
             try {
                 if (pstmt != null)
                     pstmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            try {
                 if (con != null)
                     con.close();
             } catch (SQLException e) {
@@ -66,11 +61,6 @@ public class MemberDAO {
             try {
                 if (pstmt != null)
                     pstmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            try {
                 if (con != null)
                     con.close();
             } catch (SQLException e) {
@@ -87,7 +77,6 @@ public class MemberDAO {
             pstmt = con.prepareStatement(sqlDelete);
             pstmt.setString(1, id);
             int result = pstmt.executeUpdate();
-
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -96,11 +85,6 @@ public class MemberDAO {
             try {
                 if (pstmt != null)
                     pstmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            try {
                 if (con != null)
                     con.close();
             } catch (SQLException e) {
@@ -109,7 +93,7 @@ public class MemberDAO {
         }
     }
 
-    public void JDBCsqlSelect(String id) {
+    public void JDBCsqlSelectAllWhereId(String id) {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:59162:XE", "system", "oracle");
@@ -123,7 +107,6 @@ public class MemberDAO {
                         + "연락처: " + rs.getString(7);
                 System.out.println(selectResultStr);
             }
-
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -132,11 +115,6 @@ public class MemberDAO {
             try {
                 if (pstmt != null)
                     pstmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            try {
                 if (con != null)
                     con.close();
             } catch (SQLException e) {
@@ -145,12 +123,42 @@ public class MemberDAO {
         }
     }
 
+    public String JDBCsqlSelectPwWhereId(String id) {
+        String resultPw = "";
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:59162:XE", "system", "oracle");
+            String sqlSelect = "select member_pw from Member where member_id = ?";
+            pstmt = con.prepareStatement(sqlSelect);
+            pstmt.setString(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                resultPw = rs.getString("member_pw");
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null)
+                    pstmt.close();
+                if (con != null)
+                    con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return resultPw;
+    }
+
     public void JDBCsqlSelectAll() {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:59162:XE", "system", "oracle");
-            String sqlSelect = "select * from Member";
-            pstmt = con.prepareStatement(sqlSelect);
+            String sqlSelectAll = "select * from Member";
+            pstmt = con.prepareStatement(sqlSelectAll);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 String selectResultStr = "아이디: " + rs.getString(1) + "\t" + "이름: " + rs.getString(3) + "\t" + "성별: "
@@ -167,11 +175,6 @@ public class MemberDAO {
             try {
                 if (pstmt != null)
                     pstmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            try {
                 if (con != null)
                     con.close();
             } catch (SQLException e) {

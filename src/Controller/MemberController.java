@@ -3,63 +3,56 @@ package Controller;
 import java.util.Scanner;
 
 import DAO.MemberDAO;
+import Main.ProjectMain;
 import Model.Member;
 
 public class MemberController implements MController {
     Scanner sc = new Scanner(System.in);
 
     public void memberPrint() {
-        String inputStr1 = null;
-        String inputStr2 = null;
+        String inputStr = "";
         do {
-            System.out.println("회원 관리는 M, 게시판 관리는 B를 입력해주세요.");
-            inputStr1 = sc.nextLine();
-            switch (inputStr1) {
-                case "M":
-                    do {
-                        System.out.println("회원 관리 페이지입니다.");
-                        System.out.println("E> 회원 등록");
-                        System.out.println("M> 회원 수정");
-                        System.out.println("D> 회원 삭제");
-                        System.out.println("S> 회원 검색");
-                        System.out.println("L> 회원 리스트");
-                        System.out.println("Q> 메인 화면으로");
-                        do {
-                            inputStr2 = sc.nextLine();
-                            switch (inputStr2) {
-                                case "E":
-                                    enrollMember();
-                                    break;
-                                case "M":
-                                    modifyMember();
-                                    break;
-                                case "D":
-                                    deleteMember();
-                                    break;
-                                case "S":
-                                    searchMember();
-                                    break;
-                                case "L":
-                                    listMember();
-                                    break;
-                                case "Q":
-                                    break;
-                                default:
-                                    System.out.println("올바른 값을 입력해주세요.");
-                                    continue;
-                            }
-                            System.out.println("메인 화면으로 가려면 Y를 입력해주세요.");
-                            String result = sc.nextLine();
-                            if (result.equals("y") || result.equals("Y")) {
-                                break;
-                            }
-                        } while (true);
-                    } while (true);
-                case "B":
+            System.out.println("==================");
+            System.out.println("회원 관리 페이지입니다.");
+            System.out.println("==================");
+            System.out.println("E> 회원 등록");
+            System.out.println("M> 회원 수정");
+            System.out.println("D> 회원 삭제");
+            System.out.println("S> 회원 검색");
+            System.out.println("L> 회원 리스트");
+            System.out.println("Q> 메인 화면으로");
+            do {
+                inputStr = sc.nextLine();
+                switch (inputStr) {
+                    case "E":
+                        enrollMember();
+                        break;
+                    case "M":
+                        modifyMember();
+                        break;
+                    case "D":
+                        deleteMember();
+                        break;
+                    case "S":
+                        searchMember();
+                        break;
+                    case "L":
+                        listMember();
+                        break;
+                    case "Q":
+                        ProjectMain pm = new ProjectMain();
+                        pm.mainStart();
+                        break;
+                    default:
+                        System.out.println("올바른 값을 입력해주세요.");
+                        continue;
+                }
+                System.out.println("홈 화면으로 가려면 Y를 입력해주세요.");
+                String result = sc.nextLine();
+                if (result.equals("y") || result.equals("Y")) {
                     break;
-                default:
-                    break;
-            }
+                }
+            } while (true);
         } while (true);
     }
 
@@ -91,9 +84,26 @@ public class MemberController implements MController {
         System.out.println("아이디를 입력해주세요.");
         String id = sc.nextLine();
         do {
+            System.out.println("비밀번호를 입력해주세요.");
+            String pw = sc.nextLine();
+            if (mdao.JDBCsqlSelectPwWhereId(id).equals(pw)) {
+                break;
+            } else {
+                System.out.println("비밀번호가 일치하지 않습니다.");
+                continue;
+            }
+        } while (true);
+
+        do {
             System.out.println("수정할 항목을 입력해주세요.");
             String attribute = sc.nextLine();
             switch (attribute) {
+                case "비밀번호":
+                    System.out.println("수정할 내용을 입력해주세요.");
+                    inputStr = sc.nextLine();
+                    mdao.JDBCsqlUpdate(id, "member_pw", inputStr);
+                    System.out.println("수정이 완료되었습니다.");
+                    break;
                 case "이름":
                     System.out.println("수정할 내용을 입력해주세요.");
                     inputStr = sc.nextLine();
@@ -151,7 +161,7 @@ public class MemberController implements MController {
         System.out.println("회원 검색 페이지입니다.");
         System.out.println("아이디를 입력해주세요.");
         String id = sc.nextLine();
-        mdao.JDBCsqlSelect(id);
+        mdao.JDBCsqlSelectAllWhereId(id);
     }
 
     public void listMember() {

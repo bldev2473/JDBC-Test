@@ -1,6 +1,7 @@
 package Controller;
 
 import DAO.BoarderDAO;
+import Main.ProjectMain;
 import Model.Boarder;
 
 import java.util.Calendar;
@@ -9,46 +10,51 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class BoarderController {
-    public String mainPrint() {
-        BoarderController bc = new BoarderController();
-        System.out.println("===============================");
-        System.out.println("BMS (Boarder Management System)");
-        System.out.println("===============================");
-        System.out.println("P> 게시글 등록");
-        System.out.println("M> 게시글 수정");
-        System.out.println("D> 게시글 삭제");
-        System.out.println("S> 게시글 검색");
-        System.out.println("L> 게시판 목록");
-        System.out.println("Q> 프로그램 종료");
-        Scanner sc = new Scanner(System.in);
-        String inputStr = sc.nextLine();
-        return inputStr;
-    }
+    Scanner sc = new Scanner(System.in);
 
-    public void mainStart() {
-        BoarderController c = new BoarderController();
-        String input = "";
+    public String boardPrint() {
+        String inputStr = "";
         do {
-            input = c.mainPrint();
-            if (input.equals("Q") || input.equals("q"))
-                System.exit(0);
-            switch (input) {
-                case "P":
-                    c.postBoard();
+            System.out.println("===================");
+            System.out.println("게시판 관리 페이지입니다.");
+            System.out.println("===================");
+            System.out.println("P> 게시글 등록");
+            System.out.println("M> 게시글 수정");
+            System.out.println("D> 게시글 삭제");
+            System.out.println("S> 게시글 검색");
+            System.out.println("L> 게시판 목록");
+            System.out.println("Q> 메인 화면으로");
+            do {
+                inputStr = sc.nextLine();
+                switch (inputStr) {
+                    case "P":
+                        postBoard();
+                        break;
+                    case "M":
+                        modifyBoard();
+                        break;
+                    case "D":
+                        deleteBoard();
+                        break;
+                    case "S":
+                        break;
+                    case "L":
+                        listBoard();
+                        break;
+                    case "Q":
+                        ProjectMain pm = new ProjectMain();
+                        pm.mainStart();
+                        break;
+                    default:
+                        System.out.println("올바른 값을 입력해주세요.");
+                        continue;
+                }
+                System.out.println("홈 화면으로 가려면 Y를 입력해주세요.");
+                String result = sc.nextLine();
+                if (result.equals("y") || result.equals("Y")) {
                     break;
-                case "M":
-                    c.modifyBoard();
-                    break;
-                case "D":
-                    c.deleteBoard();
-                    break;
-                case "S":
-                    break;
-                case "L":
-                    c.listBoard();
-                    break;
-            }
-            continue;
+                }
+            } while (true);
         } while (true);
     }
 
