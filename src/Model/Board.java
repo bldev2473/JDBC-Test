@@ -1,6 +1,6 @@
 package Model;
 
-public class Boarder {
+public class Board {
     private int num;
     private String id, pw, writer, subject, contents, regDate, viewCnt;
 

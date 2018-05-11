@@ -1,19 +1,23 @@
 package Controller;
 
-import DAO.BoarderDAO;
+import DAO.BoardDAO;
 import Main.ProjectMain;
-import Model.Boarder;
+import Model.Board;
 
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
 
-public class BoarderController {
+public class BoardController {
     Scanner sc = new Scanner(System.in);
+    Board board;
+    Map<Integer, Board> map;
+    String inputStr;
+    BoardDAO bdao = new BoardDAO();
 
     public String boardPrint() {
-        String inputStr = "";
+        inputStr = "";
         do {
             System.out.println("===================");
             System.out.println("게시판 관리 페이지입니다.");
@@ -50,8 +54,8 @@ public class BoarderController {
                         continue;
                 }
                 System.out.println("홈 화면으로 가려면 Y를 입력해주세요.");
-                String result = sc.nextLine();
-                if (result.equals("y") || result.equals("Y")) {
+                inputStr = sc.nextLine();
+                if (inputStr.equals("y") || inputStr.equals("Y")) {
                     break;
                 }
             } while (true);
@@ -60,58 +64,55 @@ public class BoarderController {
 
     int numCount = 0;
 
-    BoarderDAO bdao = new BoarderDAO();
-
     public void postBoard() {
-        Boarder boarder = new Boarder();
+        board = new Board();
         System.out.println("게시글 등록");
         Scanner sc = new Scanner(System.in);
         System.out.println("작성자: ");
         String writer = sc.nextLine();
-        boarder.setWriter(writer);
+        board.setWriter(writer);
         System.out.println("제목: ");
         String subject = sc.nextLine();
-        boarder.setSubject(subject);
+        board.setSubject(subject);
         System.out.println("내용: ");
         String contents = sc.nextLine();
-        boarder.setContents(contents);
+        board.setContents(contents);
         System.out.println("글 비밀번호: ");
         String pw = sc.nextLine();
-        boarder.setPw(pw);
-        boarder.setNum(++numCount);
-        boarder.setRegDate(Calendar.getInstance().getTime().toString());
-        bdao.writeFile(boarder);
+        board.setPw(pw);
+        board.setNum(++numCount);
+        board.setRegDate(Calendar.getInstance().getTime().toString());
+        bdao.writeFile(board);
         System.out.println("글 등록 완료");
     }
 
     public void listBoard() {
-        Boarder boarder = null;
+        board = null;
         System.out.println("게시판 목록");
         System.out.println("글번호\t작성자\t제목\t내용\t조회수\t좋아요수\t싫어요수\t등록일");
-        Map<Integer, Boarder> hm = bdao.readFile();
-        Iterator<Integer> it = hm.keySet().iterator();
+        map = bdao.readFile();
+        Iterator<Integer> it = map.keySet().iterator();
         Integer key = 0;
         while (it.hasNext()) {
             key = it.next();
-            boarder = hm.get(key);
-            System.out.println(boarder.getNum() + "\t" + boarder.getWriter() + "\t" + boarder.getSubject() + "\t" + boarder.getContents()
-                    + "\t" + "\t" + "\t" + "\t" + boarder.getRegDate() + "\t" + boarder.getPw());
+            board = map.get(key);
+            System.out.println(board.getNum() + "\t" + board.getWriter() + "\t" + board.getSubject() + "\t" + board.getContents()
+                    + "\t" + "\t" + "\t" + "\t" + board.getRegDate() + "\t" + board.getPw());
         }
         // Map<Integer, String> hm = new Map<Integer, String>();
     }
 
     public void modifyBoard() {
-        Boarder boarder = null;
+        board = null;
         System.out.println("게시물 수정");
         System.out.println("수정할 글 번호를 입력하세요.");
-        Scanner sc = new Scanner(System.in);
         int num1 = sc.nextInt();
-        Map<Integer, Boarder> map = bdao.readFile();
-        boarder = map.get(num1);
-        System.out.println("1. 작성자 : " + boarder.getWriter());
-        System.out.println("2. 제목 : " + boarder.getSubject());
-        System.out.println("3. 내용 : " + boarder.getContents());
-        System.out.println("4. 등록일 : " + boarder.getRegDate());
+        map = bdao.readFile();
+        board = map.get(num1);
+        System.out.println("1. 작성자 : " + board.getWriter());
+        System.out.println("2. 제목 : " + board.getSubject());
+        System.out.println("3. 내용 : " + board.getContents());
+        System.out.println("4. 등록일 : " + board.getRegDate());
         do {
             System.out.println("수정할 내용 번호(1~3)를 입력하세요.");
             int num2 = sc.nextInt();
@@ -119,22 +120,22 @@ public class BoarderController {
                 case 1:
                     System.out.println("수정 내용을 입력하세요.");
                     String writer = sc.nextLine();
-                    boarder.setWriter(writer);
-                    bdao.modifyMap(boarder);
+                    board.setWriter(writer);
+                    bdao.modifyMap(board);
                     System.out.println("수정되었습니다.");
                     break;
                 case 2:
                     System.out.println("수정 내용을 입력하세요.");
                     String subject = sc.nextLine();
-                    boarder.setSubject(subject);
-                    bdao.modifyMap(boarder);
+                    board.setSubject(subject);
+                    bdao.modifyMap(board);
                     System.out.println("수정되었습니다.");
                     break;
                 case 3:
                     System.out.println("수정 내용을 입력하세요.");
                     String contents = sc.nextLine();
-                    boarder.setContents(contents);
-                    bdao.modifyMap(boarder);
+                    board.setContents(contents);
+                    bdao.modifyMap(board);
                     System.out.println("수정되었습니다.");
                     break;
                 default:
@@ -145,12 +146,12 @@ public class BoarderController {
             // Iterator<Integer> it = map.keySet().iterator();
             // while (it.hasNext()) {
             // int i = it.next();
-            // boarder boarder1 = map.get(i);
+            // board board = map.get(i);
             // System.out.println(
-            // boarder1.getNum() + "\t" + boarder1.getWriter() + "\t" + boarder1.getSubject() + "\t" +
-            // boarder1.getContents()
-            // + "\t" + "\t" + "\t" + "\t" + boarder1.getRegistrationData() + "\t" +
-            // boarder1.getPw());
+            // board.getNum() + "\t" + board.getWriter() + "\t" + board.getSubject() + "\t" +
+            // board.getContents()
+            // + "\t" + "\t" + "\t" + "\t" + board.getRegistrationData() + "\t" +
+            // board.getPw());
             // }
 
             System.out.println("수정을 계속하려면 c 또는 C를, 게시글 수정을 종료하려면 q 또는 Q를 입려하세요.");
@@ -164,19 +165,19 @@ public class BoarderController {
     }
 
     public void deleteBoard() {
-        Boarder boarder = null;
+        board = null;
         System.out.println("게시글 삭제");
         System.out.println("삭제할 글 번호를 입력하세요.");
         Scanner sc = new Scanner(System.in);
         int num = sc.nextInt();
-        Map<Integer, Boarder> map = bdao.readFile();
-        boarder = map.get(num);
+        map = bdao.readFile();
+        board = map.get(num);
         do {
             System.out.println("글 비밀번호를 입력하세요.");
             int pw = sc.nextInt();
-            if (pw == Integer.parseInt(boarder.getPw())) {
+            if (pw == Integer.parseInt(board.getPw())) {
                 System.out.println("비밀번호가 일치합니다. 게시글이 삭제되었습니다.");
-                bdao.deleteMap(boarder);
+                bdao.deleteMap(board);
                 break;
             } else {
                 System.out.println("비밀번호가 일치하지 않습니다.");

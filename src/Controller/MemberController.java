@@ -8,9 +8,12 @@ import Model.Member;
 
 public class MemberController implements MController {
     Scanner sc = new Scanner(System.in);
+    private MemberDAO mdao;
+    private String inputStr;
+    private String inputId;
+    private String inputPw;
 
     public void memberPrint() {
-        String inputStr = "";
         do {
             System.out.println("==================");
             System.out.println("회원 관리 페이지입니다.");
@@ -48,8 +51,8 @@ public class MemberController implements MController {
                         continue;
                 }
                 System.out.println("홈 화면으로 가려면 Y를 입력해주세요.");
-                String result = sc.nextLine();
-                if (result.equals("y") || result.equals("Y")) {
+                inputStr = sc.nextLine();
+                if (inputStr.equals("y") || inputStr.equals("Y")) {
                     break;
                 }
             } while (true);
@@ -73,20 +76,20 @@ public class MemberController implements MController {
         System.out.println("연락처를 입력하세요. (예: 010-1234-5678)");
         mem.setPhone_number(sc.nextLine());
         System.out.println("회원 등록이 완료되었습니다.");
-        MemberDAO mdao = new MemberDAO();
+        mdao = new MemberDAO();
         mdao.JDBCsqlInsert(mem);
     }
 
     public void modifyMember() {
-        MemberDAO mdao = new MemberDAO();
-        String inputStr;
+        mdao = new MemberDAO();
+        String inputStrToEdit;
         System.out.println("회원 수정 페이지입니다.");
         System.out.println("아이디를 입력해주세요.");
-        String id = sc.nextLine();
+        inputId = sc.nextLine();
         do {
             System.out.println("비밀번호를 입력해주세요.");
-            String pw = sc.nextLine();
-            if (mdao.JDBCsqlSelectPwWhereId(id).equals(pw)) {
+            inputPw = sc.nextLine();
+            if (mdao.JDBCsqlSelectPwWhereId(inputId).equals(inputPw)) {
                 break;
             } else {
                 System.out.println("비밀번호가 일치하지 않습니다.");
@@ -100,38 +103,38 @@ public class MemberController implements MController {
             switch (attribute) {
                 case "비밀번호":
                     System.out.println("수정할 내용을 입력해주세요.");
-                    inputStr = sc.nextLine();
-                    mdao.JDBCsqlUpdate(id, "member_pw", inputStr);
+                    inputStrToEdit = sc.nextLine();
+                    mdao.JDBCsqlUpdate(inputId, "member_pw", inputStrToEdit);
                     System.out.println("수정이 완료되었습니다.");
                     break;
                 case "이름":
                     System.out.println("수정할 내용을 입력해주세요.");
-                    inputStr = sc.nextLine();
-                    mdao.JDBCsqlUpdate(id, "member_name", inputStr);
+                    inputStrToEdit = sc.nextLine();
+                    mdao.JDBCsqlUpdate(inputId, "member_name", inputStrToEdit);
                     System.out.println("수정이 완료되었습니다.");
                     break;
                 case "성별":
                     System.out.println("수정할 내용을 입력해주세요.");
-                    inputStr = sc.nextLine();
-                    mdao.JDBCsqlUpdate(id, "member_gender", inputStr);
+                    inputStrToEdit = sc.nextLine();
+                    mdao.JDBCsqlUpdate(inputId, "member_gender", inputStrToEdit);
                     System.out.println("수정이 완료되었습니다.");
                     break;
                 case "생년월일":
                     System.out.println("수정할 내용을 입력해주세요.");
-                    inputStr = sc.nextLine();
-                    mdao.JDBCsqlUpdate(id, "member_birth", inputStr);
+                    inputStrToEdit = sc.nextLine();
+                    mdao.JDBCsqlUpdate(inputId, "member_birth", inputStrToEdit);
                     System.out.println("수정이 완료되었습니다.");
                     break;
                 case "주소":
                     System.out.println("수정할 내용을 입력해주세요.");
-                    inputStr = sc.nextLine();
-                    mdao.JDBCsqlUpdate(id, "member_address", inputStr);
+                    inputStrToEdit = sc.nextLine();
+                    mdao.JDBCsqlUpdate(inputId, "member_address", inputStrToEdit);
                     System.out.println("수정이 완료되었습니다.");
                     break;
                 case "연락처":
                     System.out.println("수정할 내용을 입력해주세요.");
-                    inputStr = sc.nextLine();
-                    mdao.JDBCsqlUpdate(id, "member_phone_number", inputStr);
+                    inputStrToEdit = sc.nextLine();
+                    mdao.JDBCsqlUpdate(inputId, "member_phone_number", inputStrToEdit);
                     System.out.println("수정이 완료되었습니다.");
                     break;
                 default:
@@ -139,8 +142,8 @@ public class MemberController implements MController {
                     continue;
             }
             System.out.println("메인 화면으로 가려면 Y를 입력해주세요.");
-            String result = sc.nextLine();
-            if (result.equals("y") || result.equals("Y")) {
+            inputStr = sc.nextLine();
+            if (inputStr.equals("y") || inputStr.equals("Y")) {
                 break;
             }
         } while (true);
@@ -148,24 +151,24 @@ public class MemberController implements MController {
     }
 
     public void deleteMember() {
-        MemberDAO mdao = new MemberDAO();
+        mdao = new MemberDAO();
         System.out.println("회원 삭제 페이지입니다.");
         System.out.println("아이디를 입력해주세요.");
-        String id = sc.nextLine();
-        mdao.JDBCsqlDelete(id);
+        inputId = sc.nextLine();
+        mdao.JDBCsqlDelete(inputId);
         System.out.println("삭제가 완료되었습니다.");
     }
 
     public void searchMember() {
-        MemberDAO mdao = new MemberDAO();
+        mdao = new MemberDAO();
         System.out.println("회원 검색 페이지입니다.");
         System.out.println("아이디를 입력해주세요.");
-        String id = sc.nextLine();
-        mdao.JDBCsqlSelectAllWhereId(id);
+        inputId = sc.nextLine();
+        mdao.JDBCsqlSelectAllWhereId(inputId);
     }
 
     public void listMember() {
-        MemberDAO mdao = new MemberDAO();
+        mdao = new MemberDAO();
         System.out.println("회원 목록 페이지입니다.");
         mdao.JDBCsqlSelectAll();
     }

@@ -1,20 +1,20 @@
 package DAO;
 
-import Model.Boarder;
+import Model.Board;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class BoarderDAO {
+public class BoardDAO {
     FileWriter fw = null;
     BufferedWriter bw = null;
-    Map<Integer, Boarder> hm = new HashMap<Integer, Boarder>();
+    Map<Integer, Board> hm = new HashMap<Integer, Board>();
     String msg = "";
 
-    public void writeFile(Boarder boarder) {
-        hm.put(boarder.getNum(), boarder);
+    public void writeFile(Board board) {
+        hm.put(board.getNum(), board);
         try {
             fw = new FileWriter("/Users/bldev/Documents/자바 학습/FileIO/bms.txt");
             bw = new BufferedWriter(fw);
@@ -22,13 +22,13 @@ public class BoarderDAO {
             Integer key = 0;
             while (it.hasNext()) {
                 key = it.next();
-                boarder = hm.get(key);
-                msg = boarder.getNum() + ", "
-                        + boarder.getWriter() + ", "
-                        + boarder.getSubject() + ", "
-                        + boarder.getContents() + ", "
-                        + boarder.getRegDate() + ", "
-                        + boarder.getPw() + "\n";
+                board = hm.get(key);
+                msg = board.getNum() + ", "
+                        + board.getWriter() + ", "
+                        + board.getSubject() + ", "
+                        + board.getContents() + ", "
+                        + board.getRegDate() + ", "
+                        + board.getPw() + "\n";
             }
             bw.write(msg);
         } catch (IOException e) {
@@ -47,7 +47,7 @@ public class BoarderDAO {
     FileReader fr = null;
     BufferedReader br = null;
 
-    public Map<Integer, Boarder> readFile() {
+    public Map<Integer, Board> readFile() {
         String msg = "";
         String[] stringArr = null;
         try {
@@ -55,14 +55,14 @@ public class BoarderDAO {
             br = new BufferedReader(fr);
             while ((msg = br.readLine()) != null) {
                 stringArr = msg.split(", ");
-                Boarder boarder = new Boarder();
-                boarder.setNum(Integer.parseInt(stringArr[0]));
-                boarder.setWriter(stringArr[1]);
-                boarder.setSubject(stringArr[2]);
-                boarder.setContents(stringArr[3]);
-                boarder.setRegDate(stringArr[4]);
-                boarder.setPw(stringArr[5]);
-                hm.put(boarder.getNum(), boarder);
+                Board board = new Board();
+                board.setNum(Integer.parseInt(stringArr[0]));
+                board.setWriter(stringArr[1]);
+                board.setSubject(stringArr[2]);
+                board.setContents(stringArr[3]);
+                board.setRegDate(stringArr[4]);
+                board.setPw(stringArr[5]);
+                hm.put(board.getNum(), board);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -77,8 +77,8 @@ public class BoarderDAO {
         return hm;
     }
 
-    public void modifyMap(Boarder boarder) {
-        hm.replace(boarder.getNum(), boarder);
+    public void modifyMap(Board board) {
+        hm.replace(board.getNum(), board);
         try {
             fw = new FileWriter("/Users/bldev/Documents/자바 학습/FileIO/bms.txt");
             bw = new BufferedWriter(fw);
@@ -86,13 +86,13 @@ public class BoarderDAO {
             Integer key = 0;
             while (it.hasNext()) {
                 key = it.next();
-                boarder = hm.get(key);
-                msg = boarder.getNum() + ", "
-                        + boarder.getWriter() + ", "
-                        + boarder.getSubject() + ", "
-                        + boarder.getContents() + ", "
-                        + boarder.getRegDate() + ", "
-                        + boarder.getPw() + "\n";
+                board = hm.get(key);
+                msg = board.getNum() + ", "
+                        + board.getWriter() + ", "
+                        + board.getSubject() + ", "
+                        + board.getContents() + ", "
+                        + board.getRegDate() + ", "
+                        + board.getPw() + "\n";
             }
             bw.write(msg);
         } catch (IOException e) {
@@ -108,8 +108,8 @@ public class BoarderDAO {
         }
     }
 
-    public void deleteMap(Boarder boarder) {
-        hm.remove(boarder.getNum());
+    public void deleteMap(Board board) {
+        hm.remove(board.getNum());
         try {
             fw = new FileWriter("/Users/bldev/Documents/자바 학습/FileIO/bms.txt");
             bw = new BufferedWriter(fw);
@@ -117,13 +117,13 @@ public class BoarderDAO {
             Integer key = 0;
             while (it.hasNext()) {
                 key = it.next();
-                boarder = hm.get(key);
-                msg = boarder.getNum() + ", "
-                        + boarder.getWriter() + ", "
-                        + boarder.getSubject() + ", "
-                        + boarder.getContents() + ", "
-                        + boarder.getRegDate() + ", "
-                        + boarder.getPw() + "\n";
+                board = hm.get(key);
+                msg = board.getNum() + ", "
+                        + board.getWriter() + ", "
+                        + board.getSubject() + ", "
+                        + board.getContents() + ", "
+                        + board.getRegDate() + ", "
+                        + board.getPw() + "\n";
             }
             bw.write(msg);
         } catch (IOException e) {

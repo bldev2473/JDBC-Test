@@ -1,6 +1,6 @@
 package Main;
 
-import Controller.BoarderController;
+import Controller.BoardController;
 import Controller.MemberController;
 
 import java.util.Scanner;
@@ -24,7 +24,7 @@ public class ProjectMain {
                     mc.memberPrint();
                     break;
                 case "B":
-                    BoarderController bc = new BoarderController();
+                    BoardController bc = new BoardController();
                     bc.boardPrint();
                     break;
                 default:

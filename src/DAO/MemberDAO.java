@@ -149,7 +149,6 @@ public class MemberDAO {
                 e.printStackTrace();
             }
         }
-
         return resultPw;
     }
 
@@ -166,7 +165,6 @@ public class MemberDAO {
                         + "연락처: " + rs.getString(7);
                 System.out.println(selectResultStr);
             }
-
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
