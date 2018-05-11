@@ -1,7 +1,6 @@
 package DAO;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,8 +13,7 @@ public class MemberDAO {
 
     public void JDBCsqlInsert(Member mem) {
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:59162:XE", "system", "oracle");
+            con = ConnectionUtil.getConnection();
             String sqlInsert = "insert into Member values(?, ?, ?, ?, ?, ?, ?)";
             pstmt = con.prepareStatement(sqlInsert);
             pstmt.setString(1, mem.getId());
@@ -26,17 +24,11 @@ public class MemberDAO {
             pstmt.setString(6, mem.getAddress());
             pstmt.setString(7, mem.getPhone_number());
             int result = pstmt.executeUpdate();
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (pstmt != null)
-                    pstmt.close();
-                if (con != null)
-                    con.close();
+                ConnectionUtil.closeConnection(pstmt, con);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -45,24 +37,18 @@ public class MemberDAO {
 
     public void JDBCsqlUpdate(String memberId, String attr, String modification) {
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:59162:XE", "system", "oracle");
+            con = ConnectionUtil.getConnection();
             String sqlUpdate = "update Member set " + attr + " = ?" + " where member_id = ?";
             pstmt = con.prepareStatement(sqlUpdate);
             pstmt.setString(1, modification);
             pstmt.setString(2, memberId);
             int result = pstmt.executeUpdate();
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (pstmt != null)
-                    pstmt.close();
-                if (con != null)
-                    con.close();
+                ConnectionUtil.closeConnection(pstmt, con);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -71,22 +57,16 @@ public class MemberDAO {
 
     public void JDBCsqlDelete(String id) {
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:59162:XE", "system", "oracle");
+            con = ConnectionUtil.getConnection();
             String sqlDelete = "delete from Member where member_id = ?";
             pstmt = con.prepareStatement(sqlDelete);
             pstmt.setString(1, id);
             int result = pstmt.executeUpdate();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (pstmt != null)
-                    pstmt.close();
-                if (con != null)
-                    con.close();
+                ConnectionUtil.closeConnection(pstmt, con);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -95,8 +75,7 @@ public class MemberDAO {
 
     public void JDBCsqlSelectAllWhereId(String id) {
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:59162:XE", "system", "oracle");
+            con = ConnectionUtil.getConnection();
             String sqlSelect = "select * from Member where member_id = ?";
             pstmt = con.prepareStatement(sqlSelect);
             pstmt.setString(1, id);
@@ -107,16 +86,11 @@ public class MemberDAO {
                         + "연락처: " + rs.getString(7);
                 System.out.println(selectResultStr);
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (pstmt != null)
-                    pstmt.close();
-                if (con != null)
-                    con.close();
+                ConnectionUtil.closeConnection(pstmt, con);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -126,8 +100,7 @@ public class MemberDAO {
     public String JDBCsqlSelectPwWhereId(String id) {
         String resultPw = "";
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:59162:XE", "system", "oracle");
+            con = ConnectionUtil.getConnection();
             String sqlSelect = "select member_pw from Member where member_id = ?";
             pstmt = con.prepareStatement(sqlSelect);
             pstmt.setString(1, id);
@@ -135,16 +108,11 @@ public class MemberDAO {
             while (rs.next()) {
                 resultPw = rs.getString("member_pw");
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (pstmt != null)
-                    pstmt.close();
-                if (con != null)
-                    con.close();
+                ConnectionUtil.closeConnection(pstmt, con);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -154,8 +122,7 @@ public class MemberDAO {
 
     public void JDBCsqlSelectAll() {
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:59162:XE", "system", "oracle");
+            con = ConnectionUtil.getConnection();
             String sqlSelectAll = "select * from Member";
             pstmt = con.prepareStatement(sqlSelectAll);
             ResultSet rs = pstmt.executeQuery();
@@ -165,16 +132,11 @@ public class MemberDAO {
                         + "연락처: " + rs.getString(7);
                 System.out.println(selectResultStr);
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (pstmt != null)
-                    pstmt.close();
-                if (con != null)
-                    con.close();
+                ConnectionUtil.closeConnection(pstmt, con);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
