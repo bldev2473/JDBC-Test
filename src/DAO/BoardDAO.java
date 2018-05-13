@@ -15,33 +15,7 @@ public class BoardDAO {
 
     public void writeFile(Board board) {
         hm.put(board.getNum(), board);
-        try {
-            fw = new FileWriter("/Users/bldev/Documents/자바 학습/FileIO/bms.txt");
-            bw = new BufferedWriter(fw);
-            Iterator<Integer> it = hm.keySet().iterator();
-            Integer key = 0;
-            while (it.hasNext()) {
-                key = it.next();
-                board = hm.get(key);
-                msg = board.getNum() + ", "
-                        + board.getWriter() + ", "
-                        + board.getSubject() + ", "
-                        + board.getContents() + ", "
-                        + board.getRegDate() + ", "
-                        + board.getPw() + "\n";
-            }
-            bw.write(msg);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (bw != null) bw.close();
-                if (fw != null) fw.close();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        fileO();
     }
 
     FileReader fr = null;
@@ -79,6 +53,15 @@ public class BoardDAO {
 
     public void modifyMap(Board board) {
         hm.replace(board.getNum(), board);
+        fileO();
+    }
+
+    public void deleteMap(Board board) {
+        hm.remove(board.getNum());
+        fileO();
+    }
+
+    public void fileO() {
         try {
             fw = new FileWriter("/Users/bldev/Documents/자바 학습/FileIO/bms.txt");
             bw = new BufferedWriter(fw);
@@ -86,7 +69,7 @@ public class BoardDAO {
             Integer key = 0;
             while (it.hasNext()) {
                 key = it.next();
-                board = hm.get(key);
+                Board board = hm.get(key);
                 msg = board.getNum() + ", "
                         + board.getWriter() + ", "
                         + board.getSubject() + ", "
@@ -99,43 +82,15 @@ public class BoardDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (bw != null) bw.close();
-                if (fw != null) fw.close();
-
+                closeOutputStream();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void deleteMap(Board board) {
-        hm.remove(board.getNum());
-        try {
-            fw = new FileWriter("/Users/bldev/Documents/자바 학습/FileIO/bms.txt");
-            bw = new BufferedWriter(fw);
-            Iterator<Integer> it = hm.keySet().iterator();
-            Integer key = 0;
-            while (it.hasNext()) {
-                key = it.next();
-                board = hm.get(key);
-                msg = board.getNum() + ", "
-                        + board.getWriter() + ", "
-                        + board.getSubject() + ", "
-                        + board.getContents() + ", "
-                        + board.getRegDate() + ", "
-                        + board.getPw() + "\n";
-            }
-            bw.write(msg);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (bw != null) bw.close();
-                if (fw != null) fw.close();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public void closeOutputStream() throws IOException {
+        if (bw != null) bw.close();
+        if (fw != null) fw.close();
     }
 }
